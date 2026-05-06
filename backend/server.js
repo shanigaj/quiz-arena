@@ -48,8 +48,8 @@ async function start() {
     await sequelize.sync({ alter: true });
     console.log('📦 Models synced');
 
-    server.listen(PORT, () => {
-      console.log(`\n🚀 Server running on http://localhost:${PORT}`);
+    server.listen(PORT, '0.0.0.0', () => {
+      console.log(`\n🚀 Server running on port ${PORT}`);
       console.log(`📡 Socket.IO ready`);
       console.log(`🌐 Accepting connections from ${CLIENT_URL}\n`);
     });
