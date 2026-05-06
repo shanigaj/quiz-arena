@@ -225,11 +225,6 @@ function initializeSocketHandlers(io) {
     // ── START QUIZ ───────────────────────────────────
     socket.on('quiz:start', async ({ roomId }, callback) => {
       try {
-        const room = await Room.findByPk(roomId);
-        if (!room) {
-          return callback({ success: false, error: 'Room not found' });
-        }
-        
         // Find if this participant is the host
         const participant = await Participant.findOne({ 
           where: { id: socket.participantId, room_id: roomId } 
@@ -238,10 +233,18 @@ function initializeSocketHandlers(io) {
         if (!participant || !participant.is_host) {
           return callback({ success: false, error: 'Only the host can start the quiz' });
         }
-        
-        if (room.status !== 'waiting') {
-          return callback({ success: false, error: 'Quiz has already started' });
+
+        // Atomically update the room status to prevent double-click race conditions
+        const [updatedCount] = await Room.update(
+          { status: 'in_progress' },
+          { where: { id: roomId, status: 'waiting' } }
+        );
+
+        if (updatedCount === 0) {
+          return callback({ success: false, error: 'Quiz has already started or room not found' });
         }
+
+        const room = await Room.findByPk(roomId);
 
         io.to(room.room_code).emit('quiz:starting', { countdown: 3 });
 
