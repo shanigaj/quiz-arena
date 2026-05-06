@@ -38,14 +38,17 @@ const io = new Server(server, {
 
 initializeSocketHandlers(io);
 
-// ── Database Sync & Start ────────────────────────────
 async function autoSeedIfEmpty() {
   const { seed } = require('./seed');
-  const quizzes = await Quiz.count();
-  if (quizzes === 0) {
-    console.log('🌱 Database is empty. Starting auto-seed with full questions...');
+  const questionCount = await Question.count();
+  
+  // Jo 15 thi ocha questions hoy, to juno data delete kari navo ful data nakho
+  if (questionCount < 15) {
+    console.log(`🌱 Found only ${questionCount} questions. Forcing database reset and full auto-seed...`);
     await seed();
     console.log('✅ Auto-seeding complete!');
+  } else {
+    console.log(`✅ Database already has ${questionCount} questions. Skipping seed.`);
   }
 }
 
