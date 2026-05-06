@@ -5,7 +5,6 @@ const Room = require('./Room');
 const Participant = require('./Participant');
 const Answer = require('./Answer');
 
-// ── Associations ──────────────────────────────────────
 
 // Quiz → Questions (one-to-many)
 Quiz.hasMany(Question, { foreignKey: 'quiz_id', as: 'questions' });

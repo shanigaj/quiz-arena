@@ -21,7 +21,6 @@ if (process.env.DATABASE_URL) {
     },
   });
 } else {
-  // Use local variables for development
   sequelize = new Sequelize(
     process.env.DB_NAME || 'quiz_app',
     process.env.DB_USER || 'postgres',

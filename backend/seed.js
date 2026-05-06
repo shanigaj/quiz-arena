@@ -251,6 +251,31 @@ const sampleQuizzes = [
   },
 ];
 
+// Additional questions added to reach 10-15 questions per quiz
+sampleQuizzes[0].questions.push(
+  { question_text: 'What does "this" refer to in a regular function?', options: ['The function itself', 'The global object (window)', 'undefined', 'null'], correct_option: 1, order_num: 11, time_limit: 10 },
+  { question_text: 'Which operator is used to unpack an array?', options: ['&&', '...', '??', '!!'], correct_option: 1, order_num: 12, time_limit: 10 },
+  { question_text: 'How do you create an empty object?', options: ['[]', '()', '{}', '<>'], correct_option: 2, order_num: 13, time_limit: 10 },
+  { question_text: 'What is NaN?', options: ['Not a Number', 'New and Null', 'Negative and Null', 'Not a Node'], correct_option: 0, order_num: 14, time_limit: 10 },
+  { question_text: 'Which function stops a setInterval?', options: ['stopInterval', 'clearInterval', 'clearTimer', 'pauseInterval'], correct_option: 1, order_num: 15, time_limit: 10 }
+);
+
+sampleQuizzes[1].questions.push(
+  { question_text: 'What is used to pass data to components?', options: ['States', 'Props', 'Context', 'Redux'], correct_option: 1, order_num: 9, time_limit: 10 },
+  { question_text: 'Can React run without JSX?', options: ['Yes', 'No', 'Only in development', 'Only in production'], correct_option: 0, order_num: 10, time_limit: 10 },
+  { question_text: 'What hook is used to get DOM references?', options: ['useRef', 'useEffect', 'useDOM', 'useState'], correct_option: 0, order_num: 11, time_limit: 10 },
+  { question_text: 'React uses a ________ DOM.', options: ['Real', 'Shadow', 'Virtual', 'Native'], correct_option: 2, order_num: 12, time_limit: 10 },
+  { question_text: 'Which component type uses hooks?', options: ['Class Components', 'Function Components', 'HOCs', 'Pure Components'], correct_option: 1, order_num: 13, time_limit: 10 }
+);
+
+sampleQuizzes[2].questions.push(
+  { question_text: 'What is the largest mammal?', options: ['Elephant', 'Blue Whale', 'Giraffe', 'Hippopotamus'], correct_option: 1, order_num: 9, time_limit: 10 },
+  { question_text: 'Which country invented tea?', options: ['India', 'China', 'Japan', 'England'], correct_option: 1, order_num: 10, time_limit: 10 },
+  { question_text: 'What gas do plants absorb?', options: ['Oxygen', 'Nitrogen', 'Carbon Dioxide', 'Hydrogen'], correct_option: 2, order_num: 11, time_limit: 10 },
+  { question_text: 'Who wrote "Romeo and Juliet"?', options: ['Charles Dickens', 'William Shakespeare', 'Mark Twain', 'Jane Austen'], correct_option: 1, order_num: 12, time_limit: 10 },
+  { question_text: 'What is the hardest natural substance?', options: ['Gold', 'Iron', 'Diamond', 'Quartz'], correct_option: 2, order_num: 13, time_limit: 10 }
+);
+
 async function seed() {
   try {
     // Sync database (force: true drops existing tables)
@@ -274,11 +299,15 @@ async function seed() {
     }
 
     console.log('\n🎉 Seeding complete!');
-    process.exit(0);
   } catch (err) {
     console.error('❌ Seeding failed:', err);
-    process.exit(1);
+    throw err;
   }
 }
 
-seed();
+// Check if run directly (e.g. from terminal)
+if (require.main === module) {
+  seed().then(() => process.exit(0)).catch(() => process.exit(1));
+}
+
+module.exports = { seed, sampleQuizzes };

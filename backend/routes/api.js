@@ -55,7 +55,6 @@ router.get('/quizzes/:id', async (req, res) => {
 });
 
 // ── GET /api/rooms/:code ─────────────────────────────
-// Get room info by code
 router.get('/rooms/:code', async (req, res) => {
   try {
     const room = await Room.findOne({
