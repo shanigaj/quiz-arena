@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useSocket } from '../context/SocketContext';
 
 const LABELS = ['A', 'B', 'C', 'D'];
@@ -8,10 +8,13 @@ const CIRCUMFERENCE = 2 * Math.PI * 24;
 export default function Quiz() {
   const { roomCode } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { socket } = useSocket();
-  const [question, setQuestion] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(10);
-  const [totalTime, setTotalTime] = useState(10);
+  const initialQ = location.state?.initialQuestion;
+  
+  const [question, setQuestion] = useState(initialQ || null);
+  const [timeLeft, setTimeLeft] = useState(initialQ ? initialQ.timeLimit : 10);
+  const [totalTime, setTotalTime] = useState(initialQ ? initialQ.timeLimit : 10);
   const [selectedOption, setSelectedOption] = useState(null);
   const [answerResult, setAnswerResult] = useState(null);
   const [correctOption, setCorrectOption] = useState(null);

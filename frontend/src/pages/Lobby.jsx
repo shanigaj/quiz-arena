@@ -29,7 +29,9 @@ export default function Lobby() {
       setStarting(true);
       setCountdown(data.countdown);
     });
-    socket.on('quiz:question', () => navigate(`/quiz/${roomCode}`));
+    socket.on('quiz:question', (data) => {
+      navigate(`/quiz/${roomCode}`, { state: { initialQuestion: data } });
+    });
 
     // Fetch initial users
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
